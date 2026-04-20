@@ -1,9 +1,12 @@
 import React from 'react'
 import { Formik, useFormik } from 'formik'
 import * as yup from 'yup'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 
 const Signup = () => {
+  const navigate = useNavigate()
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -14,7 +17,14 @@ const Signup = () => {
     },
     onSubmit: (values) => {
       console.log(values)
-      alert('Form submitted successfully!')
+      axios.post('https://mongodb-bqfr.onrender.com', values)
+        .then(response => {
+          alert('Form submitted successfully')
+          navigate('/login')
+        })
+        .catch(error => {
+          console.error('Error submitting form:', error)
+        })
     },
     validationSchema: yup.object({
       firstName: yup.string().required('First name is required'),
